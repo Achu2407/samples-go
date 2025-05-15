@@ -1,4 +1,3 @@
-// Package models contains the structs and models for request and response
 package models
 
 type Request struct {
@@ -16,6 +15,6 @@ type GETResponse struct {
 }
 
 type Table struct {
-	ID      string `json:"id"`
+	Id      string `json:"id"`
 	Website string `json:"website"`
 }

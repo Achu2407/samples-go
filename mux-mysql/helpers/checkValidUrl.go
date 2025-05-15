@@ -1,4 +1,3 @@
-// Package helpers contains the utility functions
 package helpers
 
 import (
@@ -14,5 +13,8 @@ func CheckValidURL(link string) bool {
 		return false
 	}
 	link = strings.TrimSpace(link)
-	return r.MatchString(link)
+	if r.MatchString(link) {
+		return true
+	}
+	return false
 }
