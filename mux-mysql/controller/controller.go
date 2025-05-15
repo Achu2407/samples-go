@@ -1,4 +1,3 @@
-// Package controller contains the controller functions
 package controller
 
 import (
@@ -22,7 +21,7 @@ func CreateLink(store *sql.DB) http.HandlerFunc {
 			helpers.SendResponse(w, http.StatusBadRequest, "Error decoding JSON", "", false)
 			return
 		}
-		if valid := helpers.CheckValidURL(req.Link); !valid {
+		if valid := helpers.CheckValidURL(req.Link); valid == false {
 			helpers.SendResponse(w, http.StatusBadRequest, "Enter Valid url (starting with 'http:// or https://')", "", false)
 			return
 		}
@@ -32,7 +31,7 @@ func CreateLink(store *sql.DB) http.HandlerFunc {
 			helpers.SendResponse(w, http.StatusInternalServerError, err.Error(), "", false)
 			return
 		}
-		link := "http://localhost:8080" + "/links/" + strconv.FormatInt(id, 10)
+		link := "http://localhost:8080" + "/link/" + strconv.FormatInt(id, 10)
 		helpers.SendResponse(w, http.StatusOK, "Converted", link, true)
 	}
 }
@@ -42,7 +41,7 @@ func RedirectUser(store *sql.DB) http.HandlerFunc {
 		vars := mux.Vars(r)
 		id := vars["id"]
 		log.Printf("%v", id)
-		link, err := db.GetWebsiteFromID(id, store)
+		link, err := db.GetWebsiteFromId(id, store)
 		if err != nil {
 			log.Print("Error ", err)
 			helpers.SendResponse(w, http.StatusNotFound, "Website not found", "", false)
@@ -53,7 +52,7 @@ func RedirectUser(store *sql.DB) http.HandlerFunc {
 }
 
 func GetAllLinksFromWebsite(store *sql.DB) http.HandlerFunc {
-	return func(w http.ResponseWriter, _ *http.Request) {
+	return func(w http.ResponseWriter, r *http.Request) {
 		array, err := db.GetAllLinks(store)
 		if err != nil {
 			log.Print("Error ", err)
